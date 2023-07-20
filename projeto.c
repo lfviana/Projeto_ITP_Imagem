@@ -89,33 +89,7 @@ void salvarCinza(pixel** imagem, char *code, int max, int coluna, int linha) {
 
     fclose(arquivo);
 }
-/*
-void salvarCoresTrocadas(pixel** imagem, char *code, int max, int coluna, int linha) {
-    int i, j;
-    FILE *arquivo;
 
-    char nome_arq[50];
-    printf("Novo nome do arquivo: \n");
-    scanf("%s", nome_arq);
-
-    arquivo = fopen(nome_arq, "w");
-
-    fprintf (arquivo, "P3\n");
-    fprintf (arquivo, "%d\n ", coluna);
-    fprintf (arquivo, "%d\n", linha);
-    fprintf (arquivo, "16");
-
-    for (i = 0; i < linha; i++) {
-        for (j = 0; j < coluna; j++) {
-            fprintf(arquivo, "%d ", imagem[i][j].r);
-            fprintf(arquivo, "%d ", imagem[i][j].g);
-            fprintf(arquivo, "%d\n", imagem[i][j].b);
-        }
-    }
-
-    fclose(arquivo);
-}
-*/
 void girar90grausL(pixel** imagem, char *code, int max, int coluna, int linha) {
     int i, j;
     FILE *arquivo;
