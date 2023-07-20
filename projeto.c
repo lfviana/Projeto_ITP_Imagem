@@ -412,232 +412,75 @@ void salvarSharpening(pixel** imagem, char *code, int max, int coluna, int linha
         }
     }
 }
-/*
-void salvarBordas(pixel** imagem, char *code, int max, int coluna, int linha){
-    int i, j,aux;
-    FILE *arquivo;
-    pixel **matAux;
-    matAux = (pixel**) malloc(linha*sizeof(pixel*));
-    for(int i = 0;i < coluna;i++){
-      matAux[i] = (pixel*) malloc(coluna*sizeof(pixel));
-    }
 
-    for (i = 1; i < linha-1; i++) {
-        for (j = 1; j < coluna-1; j++) {
-           
-            aux = (int)( (imagem[i-1][j].r) + (imagem[i][j-1].r) + (imagem[i+1][j].r) +  (imagem[i][j+1].r)+(imagem[i][j].r*(-4)) );
-            if(aux < 0){
-                matAux[i][j].r = 0;
-            }else{
-                matAux[i][j].r = aux;
-            }
-            aux =(int)( (imagem[i-1][j].g) + (imagem[i][j-1].g) + (imagem[i+1][j].g) +  (imagem[i][j+1].g)+(imagem[i][j].g*(-4)) );
-            if(aux < 0){
-                matAux[i][j].g = 0;
-            }else{
-                matAux[i][j].g = aux;
-            }
-            aux= (int)( (imagem[i-1][j].b) + (imagem[i][j-1].b) + (imagem[i+1][j].b) +  (imagem[i][j+1].b)+(imagem[i][j].b*(-4)) );
-            if(aux < 0){
-                matAux[i][j].b = 0;
-            }else{
-                matAux[i][j].b = aux;
-            }
-        }
-    }
-
-    char nome_arq[50];
-    printf("Novo nome do arquivo: \n");
-    scanf("%s", nome_arq);
-
-    arquivo = fopen(nome_arq, "w");
-
-    fprintf (arquivo, "P3\n");
-    fprintf (arquivo, "%d\n ", coluna);
-    fprintf (arquivo, "%d\n", linha);
-    fprintf (arquivo, "%d\n", max);
-
-    for (i = 0; i < linha; i++) {
-        for (j = 0; j < coluna; j++) {
-            fprintf(arquivo, "%d ", matAux[i][j].r);
-            fprintf(arquivo, "%d ", matAux[i][j].g);
-            fprintf(arquivo, "%d\n", matAux[i][j].b);
-        }
-    }
-   
-}
-*/
-/*
-void salvarRelevo(pixel** imagem, char *code, int max, int coluna, int linha){
-    int i, j,aux;
-    FILE *arquivo;
-    pixel **matAux;
-    matAux = (pixel**) malloc(linha*sizeof(pixel*));
-    for(int i = 0;i < coluna;i++){
-      matAux[i] = (pixel*) malloc(coluna*sizeof(pixel));
-    }
-
-    for (i = 1; i < linha-1; i++) {
-        for (j = 1; j < coluna-1; j++) {
-           
-            aux = (int)( (imagem[i-1][j-1].r*(-2)) + (imagem[i+1][j+1].r*(2)) + (imagem[i-1][j].r*(-1)) + (imagem[i][j-1].r*(-1)) + (imagem[i+1][j].r) +  (imagem[i][j+1].r)+(imagem[i][j].r*(1)) );
-            if(aux < 0){
-                matAux[i][j].r = 0;
-            }else{
-                matAux[i][j].r = aux;
-            }
-            aux =(int)( (imagem[i-1][j-1].g*(-2)) + (imagem[i+1][j+1].g*(2)) + (imagem[i-1][j].g*(-1)) + (imagem[i][j-1].g*(-1)) + (imagem[i+1][j].g) +  (imagem[i][j+1].g)+(imagem[i][j].g*(1)) );
-            if(aux < 0){
-                matAux[i][j].g = 0;
-            }else{
-                matAux[i][j].g = aux;
-            }
-            aux= (int)( (imagem[i-1][j-1].b*(-2)) + (imagem[i+1][j+1].b*(2)) + (imagem[i-1][j].b*(-1)) + (imagem[i][j-1].b*(-1)) + (imagem[i+1][j].b) +  (imagem[i][j+1].b)+(imagem[i][j].b*(1)) );
-            if(aux < 0){
-                matAux[i][j].b = 0;
-            }else{
-                matAux[i][j].b = aux;
-            }
-        }
-    }
-
-    char nome_arq[50];
-    printf("Novo nome do arquivo: \n");
-    scanf("%s", nome_arq);
-
-    arquivo = fopen(nome_arq, "w");
-
-    fprintf (arquivo, "P3\n");
-    fprintf (arquivo, "%d\n ", coluna);
-    fprintf (arquivo, "%d\n", linha);
-    fprintf (arquivo, "%d\n", max);
-
-    for (i = 0; i < linha; i++) {
-        for (j = 0; j < coluna; j++) {
-            fprintf(arquivo, "%d ", matAux[i][j].r);
-            fprintf(arquivo, "%d ", matAux[i][j].g);
-            fprintf(arquivo, "%d\n", matAux[i][j].b);
-        }
-    }
-}
-*/
-/*
-int negativar(int n, int v[],int pos){
-    if(pos > 0){
-        if (n == pos){
-            return v[pos];
-        }else{
-            return negativar(n,v,pos-1);
-        }
-    }
-}
-
-void salvarNegativo(pixel** imagem, char *code, int max, int coluna, int linha) {
-    int i, j = 0 ;
-    FILE *arquivo;
-    pixel **matAux;
-    matAux = (pixel**) malloc(linha*sizeof(pixel*));
-    for(int i = 0;i < coluna;i++){
-      matAux[i] = (pixel*) malloc(coluna*sizeof(pixel));
-    }
-    int *neg;
-    neg = (int*) malloc((max+1)*sizeof(int));
-    for(i = max; i >= 0; i--){
-        neg[j] = i;
-        j++;
-    }
-
-    for (i = 0; i < linha; i++) {
-        for (j = 0; j < coluna; j++) {
-            matAux[i][j].r = negativar(imagem[i][j].r, neg, 255);
-            matAux[i][j].g = negativar(imagem[i][j].g, neg, 255);
-            matAux[i][j].b = negativar(imagem[i][j].b, neg, 255);
-        }
-    }
-   
-    char nome_arq[50];
-    printf("Novo nome do arquivo: \n");
-    scanf("%s", nome_arq);
-
-    arquivo = fopen(nome_arq, "w");
-
-    fprintf (arquivo, "P3\n");
-    fprintf (arquivo, "%d\n ", coluna);
-    fprintf (arquivo, "%d\n", linha);
-    fprintf (arquivo, "%d\n", max);
-
-    for (i = 0; i < linha; i++) {
-        for (j = 0; j < coluna; j++) {
-            fprintf(arquivo, "%d ", matAux[i][j].r);
-            fprintf(arquivo, "%d ", matAux[i][j].g);
-            fprintf(arquivo, "%d\n", matAux[i][j].b);
-        }
-    }
-
-    fclose(arquivo);
-}
-*/
-
-void ImprimeTelaDeOpcoes(){
+void ImprimeTelaDeOpcoes() {
     printf("*******************\n");
     printf("Escolha uma opção:\n");
     printf("*******************\n");
     printf("\n");
-    printf("1 - Escala de Cinza;\n");
-    printf("2 - Ampliar imagem;\n");
-    printf("3 - Reduzir imagem;\n");
-    printf("4 - Rotacionar 90° À direita;\n");
-    printf("5 - Rotacionar 90° À esquerda;\n");
-    printf("6 - Efeito Blurring;\n");
-    printf("7 - Efeito Sharpening;\n");
-    printf("8 - Sair\n");
-
+    printf("gray: Criar imagem em escala de cinza;\n");
+    printf("enlarge: Ampliar imagem;\n");
+    printf("reduce: Reduzir imagem;\n");
+    printf("rotate: Rotacionar 90° À direita;\n");
+    printf("rotate_left: Rotacionar 90° À esquerda;\n");
+    printf("sharp: Aplicar efeito Blurring;\n");
+    printf("blur: Aplicar efeito Sharpening;\n");
+    printf("exit: Sair\n");
 }
 
-int EscolheOpcao(){
-    int r;
-    scanf("%d", &r);
-    return r;
+char* EscolheOpcao() {
+    char opcao[50];
+    scanf("%s", opcao);
+    return strdup(opcao); // Retorna uma cópia da string digitada pelo usuário
 }
 
 
 int main(int argc, char** argv) {
-    int opcao;
+    char* opcao;
     pixel **imagem; //cria uma matriz de pixeis para armazenar a imagem
     imagem = (pixel**) malloc(MAX*sizeof(pixel*));
-    for(int i = 0;i < MAX;i++){
-      imagem[i] = (pixel*) malloc(MAX*sizeof(pixel));
+    for(int i = 0; i < MAX; i++){
+        imagem[i] = (pixel*) malloc(MAX*sizeof(pixel));
     }
     char code[3]; //o código para saber se a imagem é ascii ou binária
     int max; //o valor máximo de tonalidade de cada pixel
     int larg, alt; // largura e altura da imagem em pixeis
-   
-    ler(imagem,&code[3],&max,&larg,&alt);
- do
-    {
-      ImprimeTelaDeOpcoes();
-      opcao = EscolheOpcao();
-     if (opcao == 1){
-       salvarCinza(imagem,&code[3],max,larg,alt);
-     }
-     if (opcao == 2){
-       
-     }
-     if (opcao == 3){
-       
-     }
-     if(opcao == 4){
-       girar90grausL(imagem,&code[3],max,larg,alt);
-     }
-     if(opcao == 5){
-       girar90grausR(imagem,&code[3],max,larg,alt);
-     }
-     if(opcao == 6){
-        salvarSharpening(imagem,&code[3],max,larg,alt);
-     }
-     if(opcao == 7){
-        salvarBlurring(imagem,&code[3],max,larg,alt);
-     }
-    } while (opcao != 8);
+
+    ler(imagem, code, &max, &larg, &alt);
+
+    do {
+        ImprimeTelaDeOpcoes();
+        opcao = EscolheOpcao();
+
+        if (strcmp(opcao, "gray") == 0) {
+            salvarCinza(imagem, code, max, larg, alt);
+        }
+        else if (strcmp(opcao, "enlarge") == 0) {
+            salvarAmpliado(imagem, code, max, larg, alt);
+        }
+        else if (strcmp(opcao, "reduce") == 0) {
+            salvarReduzido(imagem, code, max, larg, alt);
+        }
+        else if (strcmp(opcao, "rotate") == 0) {
+            girar90grausL(imagem, code, max, larg, alt);
+        }
+        else if (strcmp(opcao, "rotate_left") == 0) {
+            girar90grausR(imagem, code, max, larg, alt);
+        }
+        else if (strcmp(opcao, "sharp") == 0) {
+            salvarSharpening(imagem, code, max, larg, alt);
+        }
+        else if (strcmp(opcao, "blur") == 0) {
+            salvarBlurring(imagem, code, max, larg, alt);
+        }
+        
+    } while (strcmp(opcao, "exit") != 0);
+
+    // Liberar a memória alocada para a matriz de pixels
+    for (int i = 0; i < MAX; i++) {
+        free(imagem[i]);
+    }
+    free(imagem);
+
     return 0;
 }
