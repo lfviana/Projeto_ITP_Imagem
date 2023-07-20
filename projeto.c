@@ -136,52 +136,6 @@ void girar90grausL(pixel** imagem, char *code, int max, int coluna, int linha) {
     fclose(arquivo);
 }
 
-void girar90grausR(pixel** imagem, char *code, int max, int coluna, int linha) {
-    int i, j;
-    FILE *arquivo;
-
-    pixel **matAux;
-    matAux = (pixel**) malloc(coluna*sizeof(pixel*));
-    for(int i = 0;i < coluna;i++){
-      matAux[i] = (pixel*) malloc(linha*sizeof(pixel));
-    }
-    int linhaAux = 0,colunaAux = 0;
-
-    linhaAux = coluna-1;
-    colunaAux = linha-1;
-      for(int i = 0; i < coluna; i++){
-          for(int j = 0; j < linha; j++){
-              matAux[i][j].r = imagem[colunaAux - (linha - 1)][linhaAux].r;
-              matAux[i][j].g = imagem[colunaAux - (linha - 1)][linhaAux].g;
-              matAux[i][j].b = imagem[colunaAux - (linha - 1)][linhaAux].b;
-              colunaAux++;
-          }
-          linhaAux--;
-          colunaAux = linha - 1;
-      }
-
-    char nome_arq[50];
-    printf("Novo nome do arquivo: \n");
-    scanf("%s", nome_arq);
-
-    arquivo = fopen(nome_arq, "w");
-
-    fprintf (arquivo, "P3\n");
-    fprintf (arquivo, "%d\n ", linha);
-    fprintf (arquivo, "%d\n", coluna);
-    fprintf (arquivo, "%d\n", max);
-
-    for (i = 0; i < coluna; i++) {
-        for (j = 0; j < linha; j++) {
-            fprintf(arquivo, "%d ", matAux[i][j].r);
-            fprintf(arquivo, "%d ", matAux[i][j].g);
-            fprintf(arquivo, "%d\n", matAux[i][j].b);
-        }
-    }
-
-    fclose(arquivo);
-}
-
 void salvarAmpliado(pixel** imagem, char *code, int max, int coluna, int linha) {
     int i, j;
     FILE *arquivo;
@@ -395,22 +349,18 @@ void ImprimeTelaDeOpcoes() {
     printf("gray: Criar imagem em escala de cinza;\n");
     printf("enlarge: Ampliar imagem;\n");
     printf("reduce: Reduzir imagem;\n");
-    printf("rotate: Rotacionar 90° À direita;\n");
-    printf("rotate_left: Rotacionar 90° À esquerda;\n");
+    printf("rotate: Rotacionar 90° em sentido anti-horário;\n");
     printf("sharp: Aplicar efeito Blurring;\n");
     printf("blur: Aplicar efeito Sharpening;\n");
     printf("exit: Sair\n");
 }
 
-char* EscolheOpcao() {
-    char opcao[50];
+void EscolheOpcao(char* opcao) {
     scanf("%s", opcao);
-    return strdup(opcao); // Retorna uma cópia da string digitada pelo usuário
 }
 
-
 int main(int argc, char** argv) {
-    char* opcao;
+    char opcao[50];
     pixel **imagem; //cria uma matriz de pixeis para armazenar a imagem
     imagem = (pixel**) malloc(MAX*sizeof(pixel*));
     for(int i = 0; i < MAX; i++){
@@ -420,13 +370,16 @@ int main(int argc, char** argv) {
     int max; //o valor máximo de tonalidade de cada pixel
     int larg, alt; // largura e altura da imagem em pixeis
 
-    ler(imagem, code, &max, &larg, &alt);
+    ler(imagem,&code[3],&max,&larg,&alt);
 
-    do {
+    while (1) {
         ImprimeTelaDeOpcoes();
-        opcao = EscolheOpcao();
+        EscolheOpcao(opcao); // Chama a função EscolheOpcao() passando o array opcao
 
-        if (strcmp(opcao, "gray") == 0) {
+        if (strcmp(opcao, "exit") == 0) {
+            break; // Sai do loop se a opção for "exit"
+        }
+        else if (strcmp(opcao, "gray") == 0) {
             salvarCinza(imagem, code, max, larg, alt);
         }
         else if (strcmp(opcao, "enlarge") == 0) {
@@ -438,17 +391,17 @@ int main(int argc, char** argv) {
         else if (strcmp(opcao, "rotate") == 0) {
             girar90grausL(imagem, code, max, larg, alt);
         }
-        else if (strcmp(opcao, "rotate_left") == 0) {
-            girar90grausR(imagem, code, max, larg, alt);
-        }
         else if (strcmp(opcao, "sharp") == 0) {
             salvarSharpening(imagem, code, max, larg, alt);
         }
         else if (strcmp(opcao, "blur") == 0) {
             salvarBlurring(imagem, code, max, larg, alt);
         }
-        
-    } while (strcmp(opcao, "exit") != 0);
+        else {
+            printf("Opção inválida. Tente novamente.\n");
+        }
+    }
+
 
     // Liberar a memória alocada para a matriz de pixels
     for (int i = 0; i < MAX; i++) {
