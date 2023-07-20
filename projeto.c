@@ -89,7 +89,7 @@ void salvarCinza(pixel** imagem, char *code, int max, int coluna, int linha) {
 
     fclose(arquivo);
 }
-
+/*
 void salvarCoresTrocadas(pixel** imagem, char *code, int max, int coluna, int linha) {
     int i, j;
     FILE *arquivo;
@@ -115,7 +115,7 @@ void salvarCoresTrocadas(pixel** imagem, char *code, int max, int coluna, int li
 
     fclose(arquivo);
 }
-
+*/
 void girar90grausL(pixel** imagem, char *code, int max, int coluna, int linha) {
     int i, j;
     FILE *arquivo;
@@ -261,6 +261,52 @@ void salvarAmpliado(pixel** imagem, char *code, int max, int coluna, int linha) 
     fclose(arquivo);
 }
 
+void salvarReduzido(pixel** imagem, char *code, int max, int coluna, int linha) {
+    int i, j;
+    FILE *arquivo;
+
+    // Criar a matriz auxiliar reduzida à metade do tamanho da imagem original
+    int colunaAux = coluna / 2;
+    int linhaAux = linha / 2;
+    pixel **matAux = (pixel**)malloc(colunaAux * sizeof(pixel*));
+    for (i = 0; i < colunaAux; i++) {
+        matAux[i] = (pixel*)malloc(linhaAux * sizeof(pixel));
+    }
+
+    // Preenche a matriz auxiliar reduzida com a média dos quadrados de 4 pixels da imagem original
+    for (i = 0; i < linhaAux; i++) {
+        for (j = 0; j < colunaAux; j++) {
+            int sumR = imagem[i*2][j*2].r + imagem[i*2][j*2 + 1].r + imagem[i*2 + 1][j*2].r + imagem[i*2 + 1][j*2 + 1].r;
+            int sumG = imagem[i*2][j*2].g + imagem[i*2][j*2 + 1].g + imagem[i*2 + 1][j*2].g + imagem[i*2 + 1][j*2 + 1].g;
+            int sumB = imagem[i*2][j*2].b + imagem[i*2][j*2 + 1].b + imagem[i*2 + 1][j*2].b + imagem[i*2 + 1][j*2 + 1].b;
+
+            matAux[i][j].r = sumR / 4;
+            matAux[i][j].g = sumG / 4;
+            matAux[i][j].b = sumB / 4;
+        }
+    }
+
+    char nome_arq[50];
+    printf("Novo nome do arquivo: \n");
+    scanf("%s", nome_arq);
+    arquivo = fopen(nome_arq, "w");
+
+    fprintf(arquivo, "P3\n");
+    fprintf(arquivo, "%d\n", colunaAux);
+    fprintf(arquivo, "%d\n", linhaAux);
+    fprintf(arquivo, "%d\n", max);
+
+    for (i = 0; i < linhaAux; i++) {
+        for (j = 0; j < colunaAux; j++) {
+            fprintf(arquivo, "%d ", matAux[i][j].r);
+            fprintf(arquivo, "%d ", matAux[i][j].g);
+            fprintf(arquivo, "%d\n", matAux[i][j].b);
+        }
+    }
+
+    fclose(arquivo);
+}
+
 void salvarBlurring(pixel** imagem, char *code, int max, int coluna, int linha){
     int i, j,aux;
     FILE *arquivo;
@@ -366,7 +412,7 @@ void salvarSharpening(pixel** imagem, char *code, int max, int coluna, int linha
         }
     }
 }
-
+/*
 void salvarBordas(pixel** imagem, char *code, int max, int coluna, int linha){
     int i, j,aux;
     FILE *arquivo;
@@ -420,7 +466,8 @@ void salvarBordas(pixel** imagem, char *code, int max, int coluna, int linha){
     }
    
 }
-
+*/
+/*
 void salvarRelevo(pixel** imagem, char *code, int max, int coluna, int linha){
     int i, j,aux;
     FILE *arquivo;
@@ -473,7 +520,8 @@ void salvarRelevo(pixel** imagem, char *code, int max, int coluna, int linha){
         }
     }
 }
-
+*/
+/*
 int negativar(int n, int v[],int pos){
     if(pos > 0){
         if (n == pos){
@@ -506,7 +554,6 @@ void salvarNegativo(pixel** imagem, char *code, int max, int coluna, int linha) 
             matAux[i][j].b = negativar(imagem[i][j].b, neg, 255);
         }
     }
-
    
     char nome_arq[50];
     printf("Novo nome do arquivo: \n");
@@ -529,25 +576,21 @@ void salvarNegativo(pixel** imagem, char *code, int max, int coluna, int linha) 
 
     fclose(arquivo);
 }
-
+*/
 
 void ImprimeTelaDeOpcoes(){
     printf("*******************\n");
     printf("Escolha uma opção:\n");
     printf("*******************\n");
     printf("\n");
-    printf("1 - Escala Cinza;\n");
-    printf("2 - Ampliar;\n");
-    printf("3 - Reduzir;\n");
+    printf("1 - Escala de Cinza;\n");
+    printf("2 - Ampliar imagem;\n");
+    printf("3 - Reduzir imagem;\n");
     printf("4 - Rotacionar 90° À direita;\n");
     printf("5 - Rotacionar 90° À esquerda;\n");
     printf("6 - Efeito Blurring;\n");
     printf("7 - Efeito Sharpening;\n");
-    printf("8 - Detecção de bordas;\n");
-    printf("9 - Destacar Relevo;\n");
-    printf("10 - Cores Trocadas;\n");
-    printf("11 - Negativo;\n");
-    printf("12 - Sair\n");
+    printf("8 - Sair\n");
 
 }
 
@@ -595,20 +638,6 @@ int main(int argc, char** argv) {
      if(opcao == 7){
         salvarBlurring(imagem,&code[3],max,larg,alt);
      }
-     if(opcao == 8){
-        salvarBordas(imagem,&code[3],max,larg,alt);
-     }
-     if(opcao == 9){
-        salvarRelevo(imagem,&code[3],max,larg,alt);
-     }
-     if(opcao == 10){
-        salvarCoresTrocadas(imagem,&code[3],max,larg,alt);
-     }
-     if(opcao == 11){
-        salvarNegativo(imagem,&code[3],max,larg,alt);
-     }
-     
-    } while (opcao != 12);
+    } while (opcao != 8);
     return 0;
 }
-

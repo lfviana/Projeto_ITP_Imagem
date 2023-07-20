@@ -90,6 +90,73 @@ void salvarCinza(pixel** imagem, char *code, int max, int coluna, int linha) {
     fclose(arquivo);
 }
 
+void reduzirImagem(pixel** imagem, int coluna, int linha) {
+    int nova_coluna = coluna / 2;
+    int nova_linha = linha / 2;
+    //Criação da nova imagem
+    pixel** nova_imagem = (pixel**)malloc(nova_linha * sizeof(pixel*));
+    for (int i = 0; i < nova_linha; i++) {
+        nova_imagem[i] = (pixel*)malloc(nova_coluna * sizeof(pixel));
+    }
+    //Ampliação da imagem
+    for (int i = 0; i < nova_linha; i++) {
+        for (int j = 0; j < nova_coluna; j++) {
+            nova_imagem[i][j].r = (imagem[2 * i][2 * j].r + imagem[2 * i][2 * j + 1].r +
+                                  imagem[2 * i + 1][2 * j].r + imagem[2 * i + 1][2 * j + 1].r) /
+                                 4;
+            nova_imagem[i][j].g = (imagem[2 * i][2 * j].g + imagem[2 * i][2 * j + 1].g +
+                                  imagem[2 * i + 1][2 * j].g + imagem[2 * i + 1][2 * j + 1].g) /
+                                 4;
+            nova_imagem[i][j].b = (imagem[2 * i][2 * j].b + imagem[2 * i][2 * j + 1].b +
+                                  imagem[2 * i + 1][2 * j].b + imagem[2 * i + 1][2 * j + 1].b) /
+                                 4;
+        }
+    }
+
+    // Liberar a memória da imagem original
+    for (int i = 0; i < linha; i++) {
+        free(imagem[i]);
+    }
+    free(imagem);
+
+    imagem = nova_imagem;
+}
+
+void ampliarImagem(pixel** imagem, int coluna, int linha) {
+    int nova_coluna = coluna * 2;
+    int nova_linha = linha * 2;
+
+    pixel** nova_imagem = (pixel**)malloc(nova_linha * sizeof(pixel*));
+    for (int i = 0; i < nova_linha; i++) {
+        nova_imagem[i] = (pixel*)malloc(nova_coluna * sizeof(pixel));
+    }
+
+    for (int i = 0; i < nova_linha; i++) {
+        for (int j = 0; j < nova_coluna; j++) {
+            int orig_i = i / 2;
+            int orig_j = j / 2;
+
+            nova_imagem[i][j].r = (imagem[orig_i][orig_j].r + imagem[orig_i + 1][orig_j].r +
+                                  imagem[orig_i][orig_j + 1].r + imagem[orig_i + 1][orig_j + 1].r) /
+                                 4;
+            nova_imagem[i][j].g = (imagem[orig_i][orig_j].g + imagem[orig_i + 1][orig_j].g +
+                                  imagem[orig_i][orig_j + 1].g + imagem[orig_i + 1][orig_j + 1].g) /
+                                 4;
+            nova_imagem[i][j].b = (imagem[orig_i][orig_j].b + imagem[orig_i + 1][orig_j].b +
+                                  imagem[orig_i][orig_j + 1].b + imagem[orig_i + 1][orig_j + 1].b) /
+                                 4;
+        }
+    }
+
+    // Liberar a memória da imagem original
+    for (int i = 0; i < linha; i++) {
+        free(imagem[i]);
+    }
+    free(imagem);
+
+    imagem = nova_imagem;
+}
+
 void salvarCoresTrocadas(pixel** imagem, char *code, int max, int coluna, int linha) {
     int i, j;
     FILE *arquivo;
