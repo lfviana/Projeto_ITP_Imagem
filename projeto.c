@@ -9,9 +9,9 @@ void ler(pixel** imagem, char *code, int *max, int *coluna, int *linha) {
     FILE *arquivo;
     char nome_arq[50];
 
-    arquivo = fopen("got.ppm", "r");
+    arquivo = fopen("image.ppm", "r");
        
-    if ((arquivo = fopen("got.ppm", "r")) == NULL) {
+    if ((arquivo) == NULL) {
         printf("Erro ao abrir o arquivo");
         exit(1);
     }
